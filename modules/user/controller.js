@@ -86,7 +86,10 @@ function deleteUser(id) {
 function loginUser(user) {
     return new Promise(async (resolve, reject) => {
         if (!user) {
-            reject('Invalid data');
+            reject({
+                status: 400,
+                message: 'Invalid data'
+            });
             return false;
         }
         const { email, password } = user;
@@ -94,7 +97,10 @@ function loginUser(user) {
         if (result) {
             resolve(result);
         } else {
-            reject('Incorrect email or password');
+            reject({
+                status: 500,
+                message: 'Incorrect email or password'
+            });
         }
     });
 }

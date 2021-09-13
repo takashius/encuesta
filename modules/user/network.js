@@ -94,7 +94,7 @@ const auth = require('../../middelware/auth');
       });
   });
 
-  router.post('/logout', function (req, res) {
+  router.post('/logout', auth(), function (req, res) {
     controller.logoutUser(req.user._id, req.token)
       .then((data) => {
           res.status(data.status).send(data.message);
@@ -107,7 +107,7 @@ const auth = require('../../middelware/auth');
       });
   });
 
-  router.post('/logoutall', function (req, res) {
+  router.post('/logoutall', auth(), function (req, res) {
     controller.logoutAll(req.user._id)
       .then((data) => {
           res.status(data.status).send(data.message);
@@ -120,7 +120,7 @@ const auth = require('../../middelware/auth');
       });
   });
 
-  router.post('/account', function (req, res) {
+  router.post('/account', auth(), function (req, res) {
     controller.getUser(req.user._id)
       .then((data) => {
           res.status(data.status).send(data.message);
@@ -133,7 +133,7 @@ const auth = require('../../middelware/auth');
       });
   });
 
-  router.post('/change_password', function (req, res) {
+  router.post('/change_password', auth(), function (req, res) {
     controller.changePassword(req.user, req.body.password)
       .then((data) => {
           res.status(data.status).send(data.message);

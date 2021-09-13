@@ -6,6 +6,19 @@ const encuestaSchema = Schema({
         type: Schema.ObjectId,
         ref: 'User',
     },
+    preguntas: [{
+        pregunta: {
+            type: Schema.ObjectId,
+            ref: 'Preguntas',
+        },
+        respuesta: {
+            type: Boolean
+        },
+        date: {
+            type: Date,
+            default: Date.now
+        },
+    }],
     date: {
         type: Date,
         default: Date.now

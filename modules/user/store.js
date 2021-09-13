@@ -129,29 +129,62 @@ async function loginUser(mail, pass) {
         const user = await User.findByCredentials(mail, pass);
         const { _id, name, lastname, photo, email, date, typeUser } = user;
         const token = await user.generateAuthToken();
-        return { _id, name, lastname, photo, email, date, typeUser, token };
+        return {
+            status: 200,
+            message: {
+                _id, name, lastname, photo, email, date, typeUser, token
+            }
+        };
     } catch (error) {
         console.log('ERROR STORE LOGIN', error);
-        return false;
+        return {
+            status: 500,
+            message: 'Unexpected error'
+        };
     }
 }
 
 async function logoutUser(id, tokenUser) {
-    const foundUser = await User.findOne({
-        _id: id
-    });
-    foundUser.tokens = foundUser.tokens.filter((token) => {
-        return token.token != tokenUser;
-    });
-    await foundUser.save();
+    try{
+        const foundUser = await User.findOne({
+            _id: id
+        });
+        foundUser.tokens = foundUser.tokens.filter((token) => {
+            return token.token != tokenUser;
+        });
+        await foundUser.save();
+        return {
+            status: 200,
+            message: 'Logout successful'
+        };
+    }catch(e){
+        console.log('ERROR STORE LOGOUT', e);
+        return {
+            status: 500,
+            message: 'Unexpected error'
+        };
+    }
 }
 
 async function logoutAll(id) {
-    const foundUser = await User.findOne({
-        _id: id
-    });
-    foundUser.tokens.splice(0, foundUser.tokens.length);
-    await foundUser.save();
+    try{
+        const foundUser = await User.findOne({
+            _id: id
+        });
+        foundUser.tokens.splice(0, foundUser.tokens.length);
+        await foundUser.save();
+        return {
+            status: 200,
+            message: 'Logout successful'
+        };
+    }catch(e){
+        console.log('ERROR STORE LOGOUT', e);
+        return {
+            status: 500,
+            message: 'Unexpected error'
+        };
+    }
+    
 }
 
 async function changePassword(user, newPass) {

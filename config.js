@@ -1,4 +1,8 @@
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
+
 const config = {
     dbUrl: process.env.BD_URL,
     monDebug: process.env.MONGO_DEBUG || false,
