@@ -31,6 +31,9 @@ async function updateUser(user) {
         if (user.lastname) {
             foundUser.lastname = user.lastname;
         }
+        if (user.cedula) {
+            foundUser.cedula = user.cedula;
+        }
         if (user.photo) {
             foundUser.photo = user.photo;
         }

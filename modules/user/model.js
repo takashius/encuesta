@@ -14,6 +14,10 @@ const userSchema = Schema({
         type: String,
         trim: true
     },
+    cedula: {
+        type: String,
+        trim: true
+    },
     typeUser: {
         type: Number,
         default: 1,
