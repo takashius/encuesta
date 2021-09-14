@@ -70,9 +70,9 @@ async function setEncuesta(encuesta) {
     }
 }
 
-async function updateEncuesta(encuesta) {
+async function updateEncuesta(user, preguntas) {
     try{
-        const result = await store.updateEncuesta(encuesta);
+        const result = await store.updateEncuesta(user, preguntas);
         return(result);
     }catch(e){
         console.log(e);

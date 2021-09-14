@@ -74,17 +74,12 @@ async function setEncuesta(encuesta) {
   }
 }
   
-async function updateEncuesta(encuesta){
+async function updateEncuesta(id, preguntas){
     try{
-        const foundEncuesta = await Encuesta.findOne({ _id: encuesta.id });
-
-        if(encuesta.name){
-            foundEncuesta.name = encuesta.name;
+        const foundEncuesta = await Encuesta.findOne({ user: id });
+        if(preguntas){
+          foundEncuesta.preguntas = preguntas;
         }
-        if(encuesta.description){
-            foundEncuesta.description = encuesta.description;
-        }
-
         const result = await foundEncuesta.save();
 
     return { status: 200, message: result };
