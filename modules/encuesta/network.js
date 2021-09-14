@@ -3,7 +3,7 @@ const router = express.Router();
 const controller = require('./controller');
 const auth = require('../../middelware/auth');
 
-router.get('/', auth(), function (req, res) {
+/*router.get('/', auth(), function (req, res) {
   controller.getEncuestas()
     .then((data) => {
         res.status(data.status).send(data.message);
@@ -14,9 +14,9 @@ router.get('/', auth(), function (req, res) {
             detail: e
         });
     });
-});
+});*/
 
-router.get('/:id', auth(), function (req, res) {
+router.get('/', auth(), function (req, res) {
   controller.getEncuesta(req.user._id)
     .then((data) => {
         res.status(data.status).send(data.message);
