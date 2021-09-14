@@ -3,9 +3,12 @@ const Preguntas = require('../preguntas/store');
 
 async function getEncuesta(id) {
     try{
+        let lisResp = null;
         const quest = await Preguntas.getPreguntas();
         const result = await store.getUserEncuesta(id);
-        const lisResp = result.message.preguntas;
+        if(result.message){
+            lisResp = result.message.preguntas;
+        }
         const encuesta = quest.message.map((res) => {
             if(result.message){
                 let pregunta = {
@@ -24,7 +27,8 @@ async function getEncuesta(id) {
             }else{
                 return {
                     preguntaId: res._id,
-                    pregunta: res.title
+                    pregunta: res.title,
+                    respuesta: false,
                 }
             }
         });
