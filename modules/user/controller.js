@@ -106,26 +106,42 @@ function deleteUser(id) {
     });
 }
 
-function loginUser(user) {
-    return new Promise(async (resolve, reject) => {
+async function loginUser(user) {
+    try {
         if (!user) {
-            reject({
+            return {
                 status: 400,
                 message: 'Invalid data'
-            });
-            return false;
+            };
         }
         const { email, password } = user;
         const result = await store.login(email, password);
-        if (result) {
-            resolve(result);
+        if (result.status == 200) {
+            await encuesta.setEncuesta({user: result.message._id, preguntas:[]});
+            const preguntas = await encuesta.getEncuesta(result.message._id);
+            if(preguntas.status == 200){
+                const usuarioFinal = result.message;
+                usuarioFinal.preguntas = preguntas.message;
+                return {
+                    status: 201,
+                    message: usuarioFinal
+                }
+            }else{               
+                return result;
+            }
         } else {
-            reject({
-                status: 500,
+            return {
+                status: 400,
                 message: 'Incorrect email or password'
-            });
+            };
         }
-    });
+    }catch(e){
+        console.log(e);
+        return {
+            status: 500,
+            message: "Unexpected controller error"
+        }
+    }
 }
 
 function logoutUser(id, token) {
