@@ -1,9 +1,37 @@
 const store = require('./store');
+const Preguntas = require('../preguntas/store');
 
 async function getEncuesta(id) {
     try{
-        const result = await store.getEncuesta(id);
-        return(result);
+        const quest = await Preguntas.getPreguntas();
+        const result = await store.getUserEncuesta(id);
+        const lisResp = result.message.preguntas;
+        const encuesta = quest.message.map((res) => {
+            if(result.message){
+                let pregunta = {
+                    preguntaId: res._id,
+                    pregunta: res.title,
+                    respuesta: false,
+                }
+                if(lisResp.length > 0){
+                    lisResp.find( list => {
+                        if(list.pregunta.equals(res._id)){
+                            pregunta.respuesta = list.respuesta;
+                        }
+                    });
+                }
+                return pregunta;
+            }else{
+                return {
+                    preguntaId: res._id,
+                    pregunta: res.title
+                }
+            }
+        });
+        return({
+            status: 200,
+            message: encuesta
+        });
     }catch(e){
         console.log(e);
         return {

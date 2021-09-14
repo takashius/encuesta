@@ -6,10 +6,28 @@ async function getEncuesta(id) {
       if (id) {
         query._id = id;
       }
-  
       const result = await Encuesta.findOne(query);
       return { status: 200, message: result }
     } catch (e) {
+      console.log(e);
+      return {
+        status: 500,
+        message: 'Unexpected store error',
+        detail: e
+      };
+    }
+}
+
+async function getUserEncuesta(id) {
+    try {
+      let query = {active: true};
+      if (id) {
+        query.user = id;
+      }
+      const result = await Encuesta.findOne(query);
+      return { status: 200, message: result }
+    } catch (e) {
+      console.log(e);
       return {
         status: 500,
         message: 'Unexpected store error',
@@ -103,6 +121,7 @@ async function deleteEncuesta(id){
 module.exports = {
     getEncuesta,
     getEncuestas,
+    getUserEncuesta,
     setEncuesta,
     updateEncuesta,
     deleteEncuesta

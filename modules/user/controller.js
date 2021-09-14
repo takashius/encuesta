@@ -1,5 +1,5 @@
 const store = require('./store');
-const config = require('../../config');
+const encuesta = require('../encuesta/controller');
 
 async function getUsers(filterUsers) {
     try {
@@ -30,27 +30,50 @@ async function getUser(id) {
 }
 
 async function addUser(user) {
-    if (!user) {
+    try{
+        if (!user) {
+            return {
+                status: 404,
+                message: 'User not found'
+            }
+        }
+    
+        correo = await store.checkMail(user.email, false);
+        if (correo.status == 200) {
+            return {
+                status: 400,
+                message: 'The email already exists associated with another user account'
+            }
+        }
+    
+        if (!user.photo) {
+            user.photo = "https://lotrox-test.s3-us-west-2.amazonaws.com/user-default.jpg";
+        }
+    
+        const fullUser = await store.add(user);
+        if(fullUser.status == 201){
+            await encuesta.setEncuesta({user: fullUser.message._id, preguntas:[]});
+            const preguntas = await encuesta.getEncuesta(fullUser.message._id);
+            if(preguntas.status == 200){
+                const usuarioFinal = fullUser.message;
+                usuarioFinal.preguntas = preguntas.message;
+                return {
+                    status: 201,
+                    message: usuarioFinal
+                }
+            }else{               
+                return fullUser;
+            }
+        }else{
+            return fullUser;
+        }
+    }catch(e){
+        console.log(e);
         return {
-            status: 404,
-            message: 'User not found'
+            status: 500,
+            message: "Unexpected controller error"
         }
     }
-
-    correo = await store.checkMail(user.email, false);
-    if (correo.status == 200) {
-        return {
-            status: 400,
-            message: 'The email already exists associated with another user account'
-        }
-    }
-
-    if (!user.photo) {
-        user.photo = "https://lotrox-test.s3-us-west-2.amazonaws.com/user-default.jpg";
-    }
-
-    const fullUser = await store.add(user);
-    return fullUser;
 }
 
 async function updateUser(user) {

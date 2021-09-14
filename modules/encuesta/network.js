@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./controller');
+const auth = require('../../middelware/auth');
 
-router.get('/', function (req, res) {
+router.get('/', auth(), function (req, res) {
   controller.getEncuestas()
     .then((data) => {
         res.status(data.status).send(data.message);
@@ -15,8 +16,8 @@ router.get('/', function (req, res) {
     });
 });
 
-router.get('/:id', function (req, res) {
-  controller.getEncuesta(req.params.id)
+router.get('/:id', auth(), function (req, res) {
+  controller.getEncuesta(req.user._id)
     .then((data) => {
         res.status(data.status).send(data.message);
     }).catch(e => {
@@ -28,7 +29,7 @@ router.get('/:id', function (req, res) {
     });
 });
 
-router.post('/', function (req, res) {
+router.post('/', auth(), function (req, res) {
   controller.setEncuesta(req.body)
     .then((data) => {
         res.status(data.status).send(data.message);
@@ -41,7 +42,7 @@ router.post('/', function (req, res) {
     });
 });
 
-router.patch('/', function (req, res) {
+router.patch('/', auth(), function (req, res) {
   controller.updateEncuesta(req.body)
     .then((data) => {
         res.status(data.status).send(data.message);
@@ -54,7 +55,7 @@ router.patch('/', function (req, res) {
     });
 });
 
-router.delete('/:id', function (req, res) {
+router.delete('/:id', auth(), function (req, res) {
   controller.deleteEncuesta(req.params.id)
     .then((data) => {
         res.status(data.status).send(data.message);

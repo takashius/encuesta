@@ -12,7 +12,8 @@ const encuestaSchema = Schema({
             ref: 'Preguntas',
         },
         respuesta: {
-            type: Boolean
+            type: Boolean,
+            default: false,
         },
         date: {
             type: Date,
