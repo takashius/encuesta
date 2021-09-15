@@ -117,13 +117,12 @@ async function loginUser(user) {
         const { email, password } = user;
         const result = await store.login(email, password);
         if (result.status == 200) {
-            await encuesta.setEncuesta({user: result.message._id, preguntas:[]});
             const preguntas = await encuesta.getEncuesta(result.message._id);
             if(preguntas.status == 200){
                 const usuarioFinal = result.message;
                 usuarioFinal.preguntas = preguntas.message;
                 return {
-                    status: 201,
+                    status: 200,
                     message: usuarioFinal
                 }
             }else{               
