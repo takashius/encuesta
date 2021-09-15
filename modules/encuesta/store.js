@@ -84,6 +84,7 @@ async function updateEncuesta(id, preguntas){
 
     return { status: 200, message: result };
   } catch (e) {
+    console.log(e);
     return {
       status: 500,
       message: 'Unexpected store error',

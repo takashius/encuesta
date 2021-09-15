@@ -43,7 +43,7 @@ router.post('/', auth(), function (req, res) {
 });
 
 router.patch('/', auth(), function (req, res) {
-  controller.updateEncuesta(req.body)
+  controller.updateEncuesta(req.user._id, req.body)
     .then((data) => {
         res.status(data.status).send(data.message);
     }).catch(e => {
